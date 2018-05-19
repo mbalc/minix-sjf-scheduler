@@ -1,0 +1,14 @@
+/usr/src/minix/servers/sched
+/usr/src/minix/servers/pm
+/usr/src/minix/kernel
+/usr/src/lib/libc/misc
+/usr/src/minix/lib/libsys
+
+/usr/src/minix/include/minix/com.h
+/usr/src/minix/include/minix/callnr.h
+/usr/src/include/unistd.h
+/usr/src/minix/include/minix/config.h
+/usr/src/minix/include/minix/ipc.h
+/usr/src/minix/include/minix/syslib.h
+
+

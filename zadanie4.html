@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <title>Systemy operacyjne, zadanie 4</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<body>
+<div class="container">
+
+<h2>Zadanie 4</h2>
+
+<p>Celem zadania jest zaimplementowanie strategii szeregowania Shortest Job
+First (SJF) oraz dodanie wywołania systemowego, które umożliwi procesom wybór
+tej strategii.</p>
+
+<p>Załóżmy, że pewne procesy działające w systemie wykonują się cyklicznie:
+pracują przez jakiś czas, który da się oszacować, a następnie śpią. Czas pracy
+jest znany, więc takie procesy można szeregować algorytmem SJF.</p>
+
+<p>System powinien dla każdego procesu przechowywać jego oczekiwany czas pracy.
+Im czas jest mniejszy, tym wcześniej proces zostanie wybrany do wykonania. Taki
+algorytm jest optymalny pod względem średniego czasu obrotu.</p>
+
+<p>Wszystkie procesy szeregowane zgodnie z algorytmem SJF mają ten sam
+ustalony priorytet <code>SJF_Q</code>, co oznacza, że znajdują się w tej samej kolejce procesów gotowych do wykonania. W obrębie tej kolejki procesy są  posortowane zgodnie z oczekiwanym czasem wykonania. Należy zapewnić prawidłowe umieszczenie procesu w kolejce w czasie szeregowania.</p>
+
+<p>Podczas działania procesy szeregowane zgodnie z algorytmem SJF nie zmieniają
+swojego priorytetu (kolejki) w odróżnieniu od zwykłych procesów szeregowanych domyślnie. Należy zadbać o to, aby zwykłym procesom nie był przydzielany 
+priorytet <code>SJF_Q</code>. </p>
+  
+<h3>Implementacja</h3>
+
+<p>Implementacja powinna zawierać:</p>
+
+<ul>
+  <li>Definicję stałej <code>SJF_Q = 8</code> określającej priorytet procesów
+    szeregowanych algorytmem SJF.</li>
+    
+  <li>Nową funkcję systemową: <code>int setsjf(int expected_time)</code>.
+
+      Jeśli wartość parametru jest dodatnia, to szeregowanie procesu zostanie
+      zmienione na SJF z oczekiwanym czasem pracy równym
+      <code>expected_time</code>. Wartość 0 oznacza, że proces rezygnuje z
+      szeregowania SJF i wraca do szeregowania domyślnego.<br>
+
+      Funkcja powinna przekazywać jako wynik 0, jeśli metoda szeregowania
+      została zmieniona pomyślnie, a −1 w przeciwnym przypadku. Jeśli wartość
+      parametru nie jest prawidłowa (ujemna lub większa niż
+      <code>MAX_SJFPRIO=100</code>), to <code>errno</code> przyjmuje wartość
+      <code>EINVAL</code>. Jeśli proces, który chce zmienić metodę szeregowania
+      na SJF, jest już szeregowany zgodnie z SJF, to <code>errno</code>
+      przyjmuje wartość <code>EPERM</code>.</li>
+
+  <li>Konieczne zmiany w mikrojądrze, serwerach <code>sched</code>
+    i <code>pm</code>, przy czym bezpośrednio za nagłówkiem każdej funkcji,
+    która została dodana lub zmieniona, należy dodać komentarz
+    <code>/* sjf_2018 */</code>.</li>
+</ul>
+
+<p>Dopuszczamy zmiany w katalogach:</p>
+
+<ul>
+   <li><code>/usr/src/minix/servers/sched</code>,</li>
+   <li><code>/usr/src/minix/servers/pm</code>,</li>
+   <li><code>/usr/src/minix/kernel</code>,</li>
+   <li><code>/usr/src/lib/libc/misc</code>,</li>
+   <li><code>/usr/src/minix/lib/libsys</code>.</li>
+</ul>
+
+<p>oraz w plikach nagłówkowych:</p>
+
+<ul>
+   <li><code>/usr/src/minix/include/minix/com.h</code>
+  który będzie kopiowany do <code>/usr/include/minix/com.h</code>,</li>
+   <li><code>/usr/src/minix/include/minix/callnr.h</code>,
+  który będzie kopiowany do <code>/usr/include/minix/callnr.h</code>,</li>  
+   <li><code>/usr/src/include/unistd.h</code>,
+  który będzie kopiowany do <code>/usr/include/unistd.h</code>,</li>
+   <li><code>/usr/src/minix/include/minix/syslib.h</code>, który będzie kopiowany do <code>/usr/include/minix/syslib.h</code>.</li>
+</ul>
+  
+<h3>Wskazówki</h3>
+
+<ul>
+  <li>Do zmiany metody szeregowania można dodać nową funkcję systemową
+      mikrojądra. Warto w tym przypadku wzorować się na przykład na funkcji
+      <code>do_schedule()</code>.</li>
+
+  <li>Przypominamy, że za wstawianie do kolejki procesów gotowych
+    odpowiedzialne jest mikrojądro
+    (<code>/usr/src/minix/kernel/proc.c</code>). Natomiast o wartości
+    priorytetu decyduje serwer <code>sched</code>, który powinien dbać o to, aby
+    zwykłym procesom nie przydzielić priorytetu <code>SJF_Q</code>.</li>
+  
+  <li>Nie trzeba pisać nowego serwera szeregującego.
+    Można zmodyfikować domyślny serwer <code>sched</code>.</li>
+
+  <li>Aby nowy algorytm szeregowania zaczął działać, należy wykonać
+      <code>make; make install</code> w katalogu
+      <code>/usr/src/minix/servers/sched</code> oraz w innych katalogach
+      zawierających zmiany. Następnie trzeba zbudować nowy obraz jądra, czyli
+      wykonać <code>make do-hdboot</code> w katalogu
+      <code>/usr/src/releasetools</code> i zrestartować system.
+      Gdyby obraz nie chciał się załadować lub wystąpił poważny błąd
+      (<code>kernel panic</code>), należy przy starcie systemu wybrać opcję 6,
+      która załaduje oryginalne jądro.</li>
+</ul>
+
+<h3>Rozwiązanie</h3>
+
+<p>Poniżej przyjmujemy, że ab123456 oznacza identyfikator studenta
+rozwiązującego zadanie. Należy przygotować łatkę (ang. <em>patch</em>) ze
+zmianami w katalogu <code>/usr/src</code>. Plik o nazwie
+<code>ab123456.patch</code> uzyskujemy za pomocą polecenia
+<code>diff -rupN</code>, tak jak w zadaniu 3. Będzie on aplikowany w
+<code>/usr</code> z opcją <code>-p1</code>.</p>
+
+<p>Prosimy pamiętać o dodaniu odpowiednich komentarzy, ponieważ lista
+  zmienionych funkcji uzyskana za pomocą polecenia
+  <code>grep -r sjf_2018 /usr/src</code> będzie miała wpływ na ocenę zadania.
+  Wystarczy, że każda funkcja pojawi się na liście tylko raz, więc nie potrzeba
+  umieszczać komentarzy w plikach nagłówkowych.</p>
+
+<p>W repozytorium, w katalogu <code>studenci/ab123456/zadanie4</code> należy
+umieścić:</p>
+
+<ul>
+  <li>patch ze zmianami,</li>
+  <li>plik <code>README</code> (opcjonalnie).</li>
+</ul>
+
+<p>Ostateczny termin umieszczenia rozwiązania w repozytorium to
+<strong>28 maja 2018, godz. 20.00</strong>.</p>
+
+<p>Uwaga: nie przyznajemy punktów za rozwiązanie, w którym łatka nie nakłada się
+poprawnie, które nie kompiluje się lub powoduje <code>kernel panic</code>
+podczas uruchamiania.</p>
+
+<h3>Pytania</h3>
+<p> Pytania do zadania należy kierować na adres A.Janowska@mimuw.edu.pl,
+  a odpowiedzi na często zadawane pytania szukać w pliku
+  <a href="faq.txt">odpowiedzi</a>.
+</p>
+
+</div>
+</body>
+</html>

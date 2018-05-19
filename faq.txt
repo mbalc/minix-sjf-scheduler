@@ -1,0 +1,15 @@
+1. Czy w zadaniu moglibyśmy uzyskać możliwość modyfikowania pliku: /usr/include/minix/ipc.h w celu dodania nowego formatu wiadomości, której możnaby użyć do przesłania wiadomości dot. zmiany strategii szeregowania?
+
+Tak.
+
+2. Z tego, co widzę, mamy możliwość edytowania pliku ipc.h, aby dodać nowe pola do struktury message. Czy, podobnie jak z innymi plikami nagłówkowymi, mamy edytować tylko plik /usr/src/minix/include/minix/ipc.h, a do /usr/include/minix/ipc.h zostanie on przekopiowany?
+
+Tak.
+
+3. Czy, w celu dodania stałych SJF_Q i MAX_SJFPRIO możemy również uzyskać możliwość modyfikacji pliku /usr/src/minix/include/minix/config.h? 
+
+Tak.
+
+4. Jeżeli odpowiedź jest pozytywna, to czy on również będzie kopiowany do /usr/include/minix config.h?
+
+Tak.
