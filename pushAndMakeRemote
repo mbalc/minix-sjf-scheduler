@@ -1,0 +1,2 @@
+rsync -r -e "ssh -p 10022" --files-from=./files ./new root@localhost:/
+ssh -t root@localhost -p 10022 "cd /usr/src/minix/servers/sched && make && make install && cd /usr/src/minix/servers/pm && make && make install && cd /usr/src/minix/kernel && make && make install && cd /usr/src/minix/lib/libsys && make && make install && cd /usr/src/releasetools && make do-hdboot && reboot"
