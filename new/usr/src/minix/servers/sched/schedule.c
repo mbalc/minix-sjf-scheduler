@@ -83,11 +83,20 @@ static void pick_cpu(struct schedproc * proc)
 #endif
 }
 
+void change_priority(int *priority, int diff)
+/* sjf_2018 */
+{
+	*priority += diff;
+	if (*priority == SJF_Q)
+		*priority += diff;
+}
+
 /*===========================================================================*
  *				do_noquantum				     *
  *===========================================================================*/
 
 int do_noquantum(message *m_ptr)
+/* sjf_2018 */
 {
 	register struct schedproc *rmp;
 	int rv, proc_nr_n;
@@ -100,7 +109,7 @@ int do_noquantum(message *m_ptr)
 
 	rmp = &schedproc[proc_nr_n];
 	if (rmp->priority < MIN_USER_Q) {
-		rmp->priority += 1; /* lower priority */
+		change_priority(&rmp->priority, 1); /* lower priority */
 	}
 
 	if ((rv = schedule_process_local(rmp)) != OK) {
@@ -141,6 +150,7 @@ int do_stop_scheduling(message *m_ptr)
  *				do_start_scheduling			     *
  *===========================================================================*/
 int do_start_scheduling(message *m_ptr)
+/* sjf_2018 */
 {
 	register struct schedproc *rmp;
 	int rv, proc_nr_n, parent_nr_n;
@@ -166,6 +176,9 @@ int do_start_scheduling(message *m_ptr)
 	rmp->max_priority = m_ptr->m_lsys_sched_scheduling_start.maxprio;
 	if (rmp->max_priority >= NR_SCHED_QUEUES) {
 		return EINVAL;
+	}
+	if (rmp->max_priority == SJF_Q) {
+		rmp->max_priority = USER_Q;
 	}
 
 	/* Inherit current priority and time slice from parent. Since there
@@ -209,6 +222,10 @@ int do_start_scheduling(message *m_ptr)
 
 		rmp->priority = schedproc[parent_nr_n].priority;
 		rmp->time_slice = schedproc[parent_nr_n].time_slice;
+		if (rmp->priority == SJF_Q) {
+			rmp->priority = USER_Q;
+		}
+
 		break;
 		
 	default: 
@@ -255,6 +272,7 @@ int do_start_scheduling(message *m_ptr)
  *				do_nice					     *
  *===========================================================================*/
 int do_nice(message *m_ptr)
+/* sjf_2018 */
 {
 	struct schedproc *rmp;
 	int rv;
@@ -275,6 +293,9 @@ int do_nice(message *m_ptr)
 	new_q = m_ptr->m_pm_sched_scheduling_set_nice.maxprio;
 	if (new_q >= NR_SCHED_QUEUES) {
 		return EINVAL;
+	}
+	if (new_q == SJF_Q) {
+		new_q += 1;
 	}
 
 	/* Store old values, in case we need to roll back the changes */
@@ -350,6 +371,7 @@ void init_scheduling(void)
  * and pulls them back up. This default policy will soon be changed.
  */
 static void balance_queues(minix_timer_t *tp)
+/* sjf_2018 */
 {
 	struct schedproc *rmp;
 	int proc_nr;
@@ -357,7 +379,7 @@ static void balance_queues(minix_timer_t *tp)
 	for (proc_nr=0, rmp=schedproc; proc_nr < NR_PROCS; proc_nr++, rmp++) {
 		if (rmp->flags & IN_USE) {
 			if (rmp->priority > rmp->max_priority) {
-				rmp->priority -= 1; /* increase priority */
+				change_priority(&rmp->priority, -1); /* increase priority */
 				schedule_process_local(rmp);
 			}
 		}

@@ -73,6 +73,10 @@
 #define USER_DEFAULT_CPU	-1 /* use the default cpu or do not change the
 				      current one */
 
+/* sjf_2018 */
+#define SJF_Q		   8	/* process priority reserved for SJF scheduling */
+#define MAX_SJFPRIO	 100    /* highest expected process time allowed */
+
 /*===========================================================================*
  *	There are no user-settable parameters after this line		     *
  *===========================================================================*/
