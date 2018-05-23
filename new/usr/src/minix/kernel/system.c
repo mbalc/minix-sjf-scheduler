@@ -166,6 +166,7 @@ void kernel_call(message *m_user, struct proc * caller)
  *				initialize				     *
  *===========================================================================*/
 void system_init(void)
+/* sjf_2018 */
 {
   register struct priv *sp;
   int i;
@@ -269,6 +270,7 @@ void system_init(void)
   map(SYS_SCHEDULE, do_schedule);	/* reschedule a process */
   map(SYS_SCHEDCTL, do_schedctl);	/* change process scheduler */
 
+  map(SYS_SETSJF, do_setsjf);		/* change process scheduling algorithm */
 }
 /*===========================================================================*
  *				get_priv				     *

@@ -73,6 +73,7 @@ SRCS+=  \
 	sys_safememset.c \
 	sys_schedctl.c \
 	sys_schedule.c \
+	sys_setsjf.c \
 	sys_setalarm.c \
 	sys_setgrant.c \
 	sys_settime.c \

@@ -41,6 +41,7 @@ int sys_schedule(endpoint_t proc_ep, int priority, int quantum, int
 	cpu);
 int sys_schedctl(unsigned flags, endpoint_t proc_ep, int priority, int
 	quantum, int cpu);
+int sys_setsjf(endpoint_t proc_ep, int expected_time);
 
 /* Shorthands for sys_runctl() system call. */
 #define sys_stop(proc_ep) sys_runctl(proc_ep, RC_STOP, 0)
