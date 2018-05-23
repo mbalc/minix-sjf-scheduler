@@ -394,6 +394,9 @@ int	 syscall(int, ...);
 quad_t	 __syscall(quad_t, ...);
 int	 undelete(const char *);
 
+/* sjf_2018 */
+int setsjf(int expected_time);
+
 #if 1 /*INET6*/
 int	 rcmd_af(char **, int, const char *,
 	    const char *, const char *, int *, int);

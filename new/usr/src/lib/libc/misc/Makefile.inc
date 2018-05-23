@@ -8,3 +8,7 @@ SRCS+=	initfini.c
 
 # for -fstack-protector
 SRCS+=	stack_protector.c
+
+# sjf_2018
+SRCS+=	setsjf.c
+

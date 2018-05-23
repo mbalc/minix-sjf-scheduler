@@ -13,9 +13,11 @@ int do_start_scheduling(message *m_ptr);
 int do_stop_scheduling(message *m_ptr);
 int do_nice(message *m_ptr);
 void init_scheduling(void);
+int do_setsjf(message *m_ptr);
 
 /* utility.c */
 int no_sys(int who_e, int call_nr);
 int sched_isokendpt(int ep, int *proc);
 int sched_isemtyendpt(int ep, int *proc);
 int accept_message(message *m_ptr);
+

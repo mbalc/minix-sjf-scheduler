@@ -110,3 +110,23 @@ int sched_nice(struct mproc *rmp, int nice)
 
 	return (OK);
 }
+/*===========================================================================*
+ *				do_setsjf				     *
+ *===========================================================================*/
+int do_setsjf(void)
+/* sjf_2018 */
+{
+	endpoint_t proc_endpoint = mp->mp_endpoint;
+	int expected_time = m_in.m1_i1, result;
+
+	if (expected_time < SJF_MIN_EXP_TIME || SJF_MAX_EXP_TIME < expected_time)
+                return EINVAL;
+
+
+	if(mp->mp_scheduler) { // we need to let scheduler know which priority the process has
+		result _syscall(SCHED_PROC_NR, SCHEDULING_SETSJF, &m_in);
+		if (result) return result;
+	}
+	return sys_setsjf(proc_endpoint, expected_time);
+}
+

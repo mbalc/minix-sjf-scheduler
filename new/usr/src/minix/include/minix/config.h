@@ -74,7 +74,12 @@
 				      current one */
 
 /* sjf_2018 */
-#define SJF_Q		   8	/* process priority reserved for SJF scheduling */
+#define SJF_Q			8	/* process priority reserved for SJF scheduling */
+#define SJF_QUANTUM 		650000000	/* quanta for SJF-scheduled processes */
+#define SJF_MIN_EXP_TIME 	0
+#define SJF_RESET_POLICY 	0
+#define SJF_MAX_EXP_TIME 	100
+
 #define MAX_SJFPRIO	 100    /* highest expected process time allowed */
 
 /*===========================================================================*

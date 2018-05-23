@@ -87,6 +87,9 @@ int main(void)
 				result = EPERM;
 			}
 			break;
+		case SCHEDULING_SETSJF:
+			result = do_setsjf(&m_in);
+			break;
 		default:
 			result = no_sys(who_e, call_nr);
 		}

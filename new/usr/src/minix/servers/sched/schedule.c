@@ -116,7 +116,6 @@ int do_noquantum(message *m_ptr)
 	if ((rv = schedule_process_local(rmp)) != OK) {
 		return rv;
 	}
-	printf("call stat: %d for endpoint %d\n", sys_setsjf(rmp->endpoint, 42), rmp->endpoint);
 	return OK;
 }
 
@@ -388,4 +387,18 @@ static void balance_queues(minix_timer_t *tp)
 	}
 
 	set_timer(&sched_timer, balance_timeout, balance_queues, 0);
+}
+
+/*===========================================================================*
+ *				do_setsjf				     *
+ *===========================================================================*/
+int do_setsjf(message *m_ptr)
+/* sjf_2018 */
+{
+        int expected_priority = m_ptr->m1_i1;
+
+        printf ("scheduler syscall with exp_pr:%d\n", expected_priority);
+
+	//TODO find rmp and set priority
+        return OK;
 }
