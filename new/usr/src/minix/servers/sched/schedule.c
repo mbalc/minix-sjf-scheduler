@@ -108,6 +108,7 @@ int do_noquantum(message *m_ptr)
 	}
 
 	rmp = &schedproc[proc_nr_n];
+
 	if (rmp->priority < MIN_USER_Q) {
 		change_priority(&rmp->priority, 1); /* lower priority */
 	}
@@ -115,6 +116,7 @@ int do_noquantum(message *m_ptr)
 	if ((rv = schedule_process_local(rmp)) != OK) {
 		return rv;
 	}
+	printf("call stat: %d for endpoint %d\n", sys_setsjf(rmp->endpoint, 42), rmp->endpoint);
 	return OK;
 }
 

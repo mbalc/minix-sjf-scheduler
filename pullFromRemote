@@ -1,1 +1,1 @@
-rsync -h --progress -r -e "ssh -p 10022" --files-from=./files root@localhost:/ ./new
+rsync -h --progress -r -e "ssh -p 10022" --files-from=./files --exclude-from=./exclude root@localhost:/ ./new
