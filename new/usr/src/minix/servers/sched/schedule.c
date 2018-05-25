@@ -109,7 +109,7 @@ int do_noquantum(message *m_ptr)
 
 	rmp = &schedproc[proc_nr_n];
 
-	if (rmp->priority < MIN_USER_Q) {
+	if (rmp->priority < MIN_USER_Q && rmp->priority != SJF_Q) {
 		change_priority(&rmp->priority, 1); /* lower priority */
 	}
 
@@ -223,15 +223,16 @@ int do_start_scheduling(message *m_ptr)
 
 		rmp->priority = schedproc[parent_nr_n].priority;
 		rmp->time_slice = schedproc[parent_nr_n].time_slice;
-		if (rmp->priority == SJF_Q) {
-			rmp->priority = USER_Q;
-		}
 
 		break;
 		
 	default: 
 		/* not reachable */
 		assert(0);
+	}
+
+	if (rmp->priority == SJF_Q) {
+		rmp->priority = USER_Q;
 	}
 
 	/* Take over scheduling the process. The kernel reply message populates
@@ -379,7 +380,7 @@ static void balance_queues(minix_timer_t *tp)
 
 	for (proc_nr=0, rmp=schedproc; proc_nr < NR_PROCS; proc_nr++, rmp++) {
 		if (rmp->flags & IN_USE) {
-			if (rmp->priority > rmp->max_priority) {
+			if (rmp->priority > rmp->max_priority && rmp->priority != SJF_Q) {
 				change_priority(&rmp->priority, -1); /* increase priority */
 				schedule_process_local(rmp);
 			}
@@ -395,10 +396,19 @@ static void balance_queues(minix_timer_t *tp)
 int do_setsjf(message *m_ptr)
 /* sjf_2018 */
 {
+	register struct schedproc *rmp;
         int expected_priority = m_ptr->m1_i1;
+	int rv, proc_nr_n;
+
+	if (sched_isokendpt(m_ptr->m1_i2, &proc_nr_n) != OK) {
+		return EINVAL;
+	}
+
+	rmp = &schedproc[proc_nr_n];
 
         printf ("scheduler syscall with exp_pr:%d\n", expected_priority);
 
 	//TODO find rmp and set priority
+	rmp->priority = expected_priority;
         return OK;
 }

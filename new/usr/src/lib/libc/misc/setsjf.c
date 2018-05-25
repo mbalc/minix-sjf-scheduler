@@ -9,7 +9,7 @@
 #define OK 0
 
 int failwith(int status) {
-	if (!status) return OK;
+	if (status >= 0) return OK;
 	errno = status;
 	return ERROR;
 }

@@ -117,16 +117,18 @@ int do_setsjf(void)
 /* sjf_2018 */
 {
 	endpoint_t proc_endpoint = mp->mp_endpoint;
-	int expected_time = m_in.m1_i1, result;
+	int result, expected_time = m_in.m1_i1;
+	m_in.m1_i2 = proc_endpoint;
 
 	if (expected_time < SJF_MIN_EXP_TIME || SJF_MAX_EXP_TIME < expected_time)
                 return EINVAL;
-
+	result = sys_setsjf(proc_endpoint, expected_time);
+	if (result < TASK_Q || NR_SCHED_QUEUES < result) return result;
 
 	if(mp->mp_scheduler) { // we need to let scheduler know which priority the process has
-		result _syscall(SCHED_PROC_NR, SCHEDULING_SETSJF, &m_in);
-		if (result) return result;
+		m_in.m1_i1 = result;
+		result = _syscall(SCHED_PROC_NR, SCHEDULING_SETSJF, &m_in);
 	}
-	return sys_setsjf(proc_endpoint, expected_time);
+	return result;
 }
 
