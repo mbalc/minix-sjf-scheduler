@@ -116,19 +116,28 @@ int sched_nice(struct mproc *rmp, int nice)
 int do_setsjf(void)
 /* sjf_2018 */
 {
+	// if something fails during proceeding with policy switch,
+	// this will always return an error code, else the result will be equal to OK = 0
+
 	endpoint_t proc_endpoint = mp->mp_endpoint;
-	int result, expected_time = m_in.m1_i1;
+	int expected_time = m_in.m1_i1;
 	m_in.m1_i2 = proc_endpoint;
 
 	if (expected_time < SJF_MIN_EXP_TIME || SJF_MAX_EXP_TIME < expected_time)
-                return EINVAL;
-	result = sys_setsjf(proc_endpoint, expected_time);
-	if (result < TASK_Q || NR_SCHED_QUEUES < result) return result;
+                return EINVAL;  // just a sanity check
+	int result = sys_setsjf(proc_endpoint, expected_time);
+	int new_queue = -(_SIGN result);  // if this is normal result, this will have a sign
+		// opposite to _SIGN (see comments in kernel/system/do_setsjf.c) - now this
+		// will be positive for a normal return and negative for an error
+
+	if (new_queue < TASK_Q || NR_SCHED_QUEUES < new_queue)
+		return result;  // error
 
 	if(mp->mp_scheduler) { // we need to let scheduler know which priority the process has
-		m_in.m1_i1 = result;
-		result = _syscall(SCHED_PROC_NR, SCHEDULING_SETSJF, &m_in);
+		m_in.m1_i1 = new_queue;  // pass a new queue number
+		// lesser TODO: get a relevant sched proc nr instead of using predefined one
+		return _syscall(SCHED_PROC_NR, SCHEDULING_SETSJF, &m_in);
 	}
-	return result;
+	return 0;
 }
 

@@ -3,6 +3,7 @@
 #include <minix/endpoint.h>
 #include <minix/config.h>
 #include "kernel/clock.h"
+#include <errno.h>
 
 /*===========================================================================*
  *				do_setsjf  				     *
@@ -56,5 +57,5 @@ int do_setsjf(struct proc * caller, message * m_ptr)
 
 	result = sched_proc(p, new_priority, new_quantum, cpu);
 	if (result != OK) return result;
-	return new_priority;
+	return -(_SIGN new_priority);  // return with sign other that the one for returning errors
 }
