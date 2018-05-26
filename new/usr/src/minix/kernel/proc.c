@@ -1526,6 +1526,7 @@ asyn_error:
 void enqueue(
   register struct proc *rp	/* this process is now runnable */
 )
+/* sjf_2018 */
 {
 /* Add 'rp' to one of the queues of runnable processes.  This function is 
  * responsible for inserting a process into one of the scheduling queues. 
@@ -1551,9 +1552,23 @@ void enqueue(
       rp->p_nextready = NULL;		/* mark new end */
   } 
   else {					/* add to tail of queue */
-      rdy_tail[q]->p_nextready = rp;		/* chain tail of queue */	
-      rdy_tail[q] = rp;				/* set new queue tail */
-      rp->p_nextready = NULL;		/* mark new end */
+	if (q == SJF_Q) {
+		struct proc **my_head = &rdy_head[q];
+		while ((*my_head)->p_nextready != NULL && (*my_head)->expected_time <= rp->expected_time) {
+			my_head = &(*my_head)->p_nextready;
+		}
+		/* Insert rp before *my_head */
+		rp->p_nextready = *my_head;
+		*my_head = rp;
+		if (my_head == NULL) {  // inserting at the end of list
+			rdy_tail[q] = rp;  		/* set new queue tail */
+		}
+	}
+	else {
+	      rdy_tail[q]->p_nextready = rp;		/* chain tail of queue */
+	      rdy_tail[q] = rp;				/* set new queue tail */
+	      rp->p_nextready = NULL;		/* mark new end */
+	}
   }
 
   if (cpuid == rp->p_cpu) {

@@ -36,6 +36,7 @@ int do_setsjf(struct proc * caller, message * m_ptr)
 		if (p->p_priority != SJF_Q) {
 			return EPERM;  // process is already scheduled with default method
 		}
+		// TODO remember last priority and reuse it here
 		if (p->p_scheduler) {  // SCHED manages this process
 			new_priority = USER_Q;
 		}
@@ -51,7 +52,8 @@ int do_setsjf(struct proc * caller, message * m_ptr)
 		}
 	}
 
-	// TODO: set priority and quantum basing on expected_time
+	p->expected_time = expected_time;
+
 	result = sched_proc(p, new_priority, new_quantum, cpu);
 	if (result != OK) return result;
 	return new_priority;

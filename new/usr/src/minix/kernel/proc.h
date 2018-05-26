@@ -131,6 +131,8 @@ struct proc {
 #if DEBUG_TRACE
   int p_schedules;
 #endif
+
+  int expected_time;  /* for managing sjf_2018 priorities */
 };
 
 #endif /* __ASSEMBLY__ */
