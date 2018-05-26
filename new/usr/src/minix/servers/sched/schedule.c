@@ -296,13 +296,15 @@ int do_nice(message *m_ptr)
 	if (new_q >= NR_SCHED_QUEUES) {
 		return EINVAL;
 	}
-	if (new_q == SJF_Q) {
-		new_q += 1;
-	}
 
 	/* Store old values, in case we need to roll back the changes */
 	old_q     = rmp->priority;
 	old_max_q = rmp->max_priority;
+
+	if (new_q == SJF_Q || old_q == SJF_Q) {
+		printf("SCHED: WARNING: such do_nice modification would disrupt SJF behaviour");
+		return EINVAL;
+	}
 
 	/* Update the proc entry and reschedule the process */
 	rmp->max_priority = rmp->priority = new_q;
@@ -401,6 +403,8 @@ int do_setsjf(message *m_ptr)
 	int rv, proc_nr_n;
 
 	if (sched_isokendpt(m_ptr->m1_i2, &proc_nr_n) != OK) {
+		printf("SCHED: WARNING: got an invalid endpoint in OOQ msg %u.\n",
+		m_ptr->m_source);
 		return EINVAL;
 	}
 
