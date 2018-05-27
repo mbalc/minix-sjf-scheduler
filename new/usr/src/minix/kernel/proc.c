@@ -1554,7 +1554,7 @@ void enqueue(
   else {					/* add to tail of queue */
 	if (q == SJF_Q) {
 		struct proc **my_head = &rdy_head[q];
-		while ((*my_head)->p_nextready != NULL && (*my_head)->sjf_expected_time <= rp->sjf_expected_time) {
+		while ((*my_head)->p_nextready != NULL && (*my_head)->expected_time <= rp->expected_time) {
 			my_head = &(*my_head)->p_nextready;
 		}
 		/* Insert rp before *my_head */

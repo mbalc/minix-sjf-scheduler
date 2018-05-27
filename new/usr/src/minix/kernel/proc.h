@@ -20,9 +20,6 @@
 #include "priv.h"
 
 struct proc {
-  int sjf_expected_time;	/* for managing sjf_2018 priorities */
-  int sjf_last_priority;	/* for restoring process properties when turning sjf off */
-  int sjf_last_quantum;		/* similar to the above */
   struct stackframe_s p_reg;	/* process' registers saved in stack frame */
   struct segframe p_seg;	/* segment descriptors */
   proc_nr_t p_nr;		/* number of this process (for fast access) */
@@ -36,7 +33,6 @@ struct proc {
 				   FIXME remove this */
   struct proc *p_scheduler;	/* who should get out of quantum msg */
   unsigned p_cpu;		/* what CPU is the process running on */
-
 #ifdef CONFIG_SMP
   bitchunk_t p_cpu_mask[BITMAP_CHUNKS(CONFIG_MAX_CPUS)]; /* what CPUs is the
 							    process allowed to
@@ -135,6 +131,8 @@ struct proc {
 #if DEBUG_TRACE
   int p_schedules;
 #endif
+
+  int expected_time;  /* for managing sjf_2018 priorities */
 };
 
 #endif /* __ASSEMBLY__ */

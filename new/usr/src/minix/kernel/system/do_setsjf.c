@@ -37,8 +37,14 @@ int do_setsjf(struct proc * caller, message * m_ptr)
 		if (p->p_priority != SJF_Q) {
 			return EPERM;  // process is already scheduled with default method
 		}
-		new_priority = p->sjf_last_priority;
-		new_quantum = p->sjf_last_quantum;
+		// TODO remember last priority and reuse it here
+		if (p->p_scheduler) {  // SCHED manages this process
+			new_priority = USER_Q;
+		}
+		else {  // no scheduler - managed by kernel
+			new_priority = TASK_Q;
+		}
+		new_quantum = USER_QUANTUM;
 	}
 
 	else { // switch to scheduling with SJF
@@ -47,9 +53,7 @@ int do_setsjf(struct proc * caller, message * m_ptr)
 		}
 	}
 
-	p->sjf_expected_time = expected_time;
-	p->sjf_last_priority = p->p_priority;
-	p->sjf_last_quantum = p->p_quantum_size_ms;
+	p->expected_time = expected_time;
 
 	result = sched_proc(p, new_priority, new_quantum, cpu);
 	if (result != OK) return result;

@@ -1,12 +1,3 @@
-# Setup - important!
-
-In this system patch I am making changes to proc.h kernel structure. Since many tools that
-are responsible for setting a booting system up rely on this structure, to avoid system boot
-failure it is most recommended to rebuild all system files by:
-- entering /usr/src
-- running `make` and `make install`
-- doing an usual `cd /usr/src/releasetools ; make do-hdboot ; reboot`
-
 # System call order and specification:
 
 - libc/misc/setsjf.c:
@@ -29,6 +20,6 @@ failure it is most recommended to rebuild all system files by:
     - _SIGN sign means an error
     - -(_SIGN) sign means a standard priority output
     - ...where (_SIGN) is a sign of errno.h errors as defined in default sys/errno.h header
-- sched/schedule.c::do_setsjf(message *m_ptr)
+- sched/schedule.c
   - updates its data about a given process
 
