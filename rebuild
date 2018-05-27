@@ -1,0 +1,3 @@
+cd /usr/src/releasetools
+make do-hdboot
+reboot

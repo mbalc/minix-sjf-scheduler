@@ -1,0 +1,2 @@
+make test
+./test 46543 21 & ./test 46543 51 & ./test 46543 91 & ./test 46543 71

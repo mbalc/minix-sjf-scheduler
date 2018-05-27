@@ -1,0 +1,1 @@
+diff -rupN old/usr/ new/usr/ > mb385130.patch
