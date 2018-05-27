@@ -165,8 +165,7 @@ void kernel_call(message *m_user, struct proc * caller)
 /*===========================================================================*
  *				initialize				     *
  *===========================================================================*/
-void system_init(void)
-/* sjf_2018 */
+void system_init(void) /* sjf_2018 */
 {
   register struct priv *sp;
   int i;

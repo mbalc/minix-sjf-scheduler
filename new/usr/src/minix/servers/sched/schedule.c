@@ -83,8 +83,7 @@ static void pick_cpu(struct schedproc * proc)
 #endif
 }
 
-void change_priority(int *priority, int diff)
-/* sjf_2018 */
+void change_priority(int *priority, int diff) /* sjf_2018 */
 {
 	*priority += diff;
 	if (*priority == SJF_Q)
@@ -95,8 +94,7 @@ void change_priority(int *priority, int diff)
  *				do_noquantum				     *
  *===========================================================================*/
 
-int do_noquantum(message *m_ptr)
-/* sjf_2018 */
+int do_noquantum(message *m_ptr) /* sjf_2018 */
 {
 	register struct schedproc *rmp;
 	int rv, proc_nr_n;
@@ -150,8 +148,7 @@ int do_stop_scheduling(message *m_ptr)
 /*===========================================================================*
  *				do_start_scheduling			     *
  *===========================================================================*/
-int do_start_scheduling(message *m_ptr)
-/* sjf_2018 */
+int do_start_scheduling(message *m_ptr) /* sjf_2018 */
 {
 	register struct schedproc *rmp;
 	int rv, proc_nr_n, parent_nr_n;
@@ -272,8 +269,7 @@ int do_start_scheduling(message *m_ptr)
 /*===========================================================================*
  *				do_nice					     *
  *===========================================================================*/
-int do_nice(message *m_ptr)
-/* sjf_2018 */
+int do_nice(message *m_ptr) /* sjf_2018 */
 {
 	struct schedproc *rmp;
 	int rv;
@@ -377,8 +373,7 @@ void init_scheduling(void)
  * quantum. This function will find all proccesses that have been bumped down,
  * and pulls them back up. This default policy will soon be changed.
  */
-static void balance_queues(minix_timer_t *tp)
-/* sjf_2018 */
+static void balance_queues(minix_timer_t *tp) /* sjf_2018 */
 {
 	struct schedproc *rmp;
 	int proc_nr;
@@ -398,8 +393,7 @@ static void balance_queues(minix_timer_t *tp)
 /*===========================================================================*
  *				do_setsjf				     *
  *===========================================================================*/
-int do_setsjf(message *m_ptr)
-/* sjf_2018 */
+int do_setsjf(message *m_ptr) /* sjf_2018 */
 {
 	register struct schedproc *rmp;
         int expected_priority = m_ptr->m1_i1;

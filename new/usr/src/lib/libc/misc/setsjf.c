@@ -9,16 +9,14 @@
 #define S_ERROR -1
 #define S_OK 0
 
-int failwith(int status) {
-/* sjf_2018 */
+int failwith(int status) { /* sjf_2018 */
 	if (status == 0) return S_OK;
 	if (status < 0) status = -status; // absolute value
 	errno = (_SIGN status);
 	return S_ERROR;
 }
 
-int setsjf(int expected_time) {
-/* sjf_2018 */
+int setsjf(int expected_time) { /* sjf_2018 */
 	message m;
 	m.m1_i1 = expected_time;
 

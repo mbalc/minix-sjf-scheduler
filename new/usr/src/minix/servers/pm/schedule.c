@@ -113,8 +113,7 @@ int sched_nice(struct mproc *rmp, int nice)
 /*===========================================================================*
  *				do_setsjf				     *
  *===========================================================================*/
-int do_setsjf(void)
-/* sjf_2018 */
+int do_setsjf(void) /* sjf_2018 */
 {
 	// if something fails during proceeding with policy switch,
 	// this will always return an error code, else the result will be equal to OK = 0

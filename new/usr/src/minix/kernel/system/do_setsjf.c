@@ -8,8 +8,7 @@
 /*===========================================================================*
  *				do_setsjf  				     *
  *===========================================================================*/
-int do_setsjf(struct proc * caller, message * m_ptr) {
-/* sjf_2018 */
+int do_setsjf(struct proc * caller, message * m_ptr) { /* sjf_2018 */
 	struct proc *p;
 	int proc_nr, new_priority = SJF_Q,
 		new_quantum = SJF_QUANTUM, cpu = -1;

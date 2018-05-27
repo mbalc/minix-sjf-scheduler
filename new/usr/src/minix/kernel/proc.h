@@ -132,7 +132,7 @@ struct proc {
   int p_schedules;
 #endif
 
-  int expected_time;  /* for managing sjf_2018 priorities */
+  int expected_time;  /* for managing SJF priorities */
 };
 
 #endif /* __ASSEMBLY__ */

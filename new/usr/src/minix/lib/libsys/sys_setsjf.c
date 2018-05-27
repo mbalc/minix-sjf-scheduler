@@ -1,7 +1,6 @@
 #include "syslib.h"
 
-int sys_setsjf(endpoint_t proc_ep, int expected_time) {
-/* sjf_2018 */
+int sys_setsjf(endpoint_t proc_ep, int expected_time) { /* sjf_2018 */
         message m;
 
         m.m1_i1 = proc_ep;
