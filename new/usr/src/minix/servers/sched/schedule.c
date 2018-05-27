@@ -223,7 +223,6 @@ int do_start_scheduling(message *m_ptr)
 
 		rmp->priority = schedproc[parent_nr_n].priority;
 		rmp->time_slice = schedproc[parent_nr_n].time_slice;
-
 		break;
 		
 	default: 
@@ -414,9 +413,6 @@ int do_setsjf(message *m_ptr)
 
 	rmp = &schedproc[proc_nr_n];
 
-        printf ("scheduler syscall with exp_pr:%d\n", expected_priority);
-
-	//TODO find rmp and set priority
 	rmp->priority = expected_priority;
         return OK;
 }

@@ -18,8 +18,8 @@ struct machine machine;		/* machine info */
 /*===========================================================================*
  *				main					     *
  *===========================================================================*/
-int main(void)
-{
+int main(void) {
+/* sjf_2018 */
 	/* Main routine of the scheduler. */
 	message m_in;	/* the incoming message itself is kept here. */
 	int call_nr;	/* system call number */

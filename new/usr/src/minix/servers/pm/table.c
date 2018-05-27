@@ -12,6 +12,7 @@
 #define CALL(n)	[((n) - PM_BASE)]
 
 int (* const call_vec[NR_PM_CALLS])(void) = {
+/* sjf_2018 */
 	CALL(PM_EXIT)		= do_exit,		/* _exit(2) */
 	CALL(PM_FORK)		= do_fork,		/* fork(2) */
 	CALL(PM_WAITPID)	= do_waitpid,		/* waitpid(2) */

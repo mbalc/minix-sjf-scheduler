@@ -8,26 +8,22 @@
 /*===========================================================================*
  *				do_setsjf  				     *
  *===========================================================================*/
-int do_setsjf(struct proc * caller, message * m_ptr)
-{
-
+int do_setsjf(struct proc * caller, message * m_ptr) {
+/* sjf_2018 */
 	struct proc *p;
 	int proc_nr, new_priority = SJF_Q,
 		new_quantum = SJF_QUANTUM, cpu = -1;
-	//TODO switch to generic message type
-	//lesser TODO switch to custom message
-	int result, expected_time = m_ptr->m_lsys_krn_schedule.cpu;
+	int result, expected_time = m_ptr->m1_i2;
 
 	if (expected_time < SJF_MIN_EXP_TIME || SJF_MAX_EXP_TIME < expected_time) 
 		return EINVAL;
 
-	if (!isokendpt(m_ptr->m_lsys_krn_schedule.endpoint, &proc_nr)) {
+	if (!isokendpt(m_ptr->m1_i1, &proc_nr)) {
 		printf("endpoint not ok\n");
 		return EINVAL;
 	}
 
 	p = proc_addr(proc_nr);
-	printf("kernel call from pid=%d\n", proc_nr);
 
 	/* lesser TODO: Only the process itself should be able to modify its SJF status - not specified in task */
 	//if (caller != p)
