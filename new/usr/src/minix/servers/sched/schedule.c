@@ -301,7 +301,11 @@ int do_nice(message *m_ptr)
 	old_q     = rmp->priority;
 	old_max_q = rmp->max_priority;
 
-	if (new_q == SJF_Q || old_q == SJF_Q) {
+	if (new_q == SJF_Q) {
+		new_q += 1;
+	}
+
+	if (old_q == SJF_Q) {
 		printf("SCHED: WARNING: such do_nice modification would disrupt SJF behaviour");
 		return EINVAL;
 	}
