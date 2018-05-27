@@ -1,3 +1,20 @@
+# Notice
+
+Before building, one is required to copy headers from `/usr/src/include` to `/usr/include`
+and from `/usr/src/minix/include/minix` to `/usr/include/minix`.
+
+Changes made in this patch require remaking following directories (make && make install)
+
+`/usr/src/minix/kernel`
+`/usr/src/lib/libc`
+`/usr/src/minix/lib/libsys`
+`/usr/src/minix/commands/service`
+`/usr/src/minix/servers/pm`
+`/usr/src/minix/servers/sched`
+
+After making, one should `make do-hdboot` in `/usr/src/releasetools` and then reboot
+
+
 # System call order and specification:
 
 - libc/misc/setsjf.c:
